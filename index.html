@@ -1,0 +1,167 @@
+// =================================================================
+// ARCHIVO 1: index.html (El frontend que ve el usuario)
+// =================================================================
+// NOTA: Fíjate que la llamada a la API ahora apunta a '/api/chat', 
+// no a la URL de Google.
+// =================================================================
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot FAQ - Maestría en IoT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chat-bubble-user { background-color: #3b82f6; color: white; }
+        .chat-bubble-bot { background-color: #e5e7eb; color: #1f2937; }
+        .chat-bubble { padding: 0.75rem 1rem; border-radius: 1rem; max-width: 80%; word-wrap: break-word; }
+        #chat-container::-webkit-scrollbar { width: 8px; }
+        #chat-container::-webkit-scrollbar-track { background: #f1f5f9; }
+        #chat-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        #chat-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-100 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl flex flex-col h-[90vh]">
+        <header class="bg-blue-600 text-white p-4 rounded-t-2xl shadow-md flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold">Asistente Virtual</h1>
+                <p class="text-sm opacity-90">Maestría en Internet de las Cosas (IoT)</p>
+            </div>
+            <div class="mt-3 md:mt-0">
+                <label for="file-upload" class="cursor-pointer bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-50 transition-colors duration-300 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 8.414V13a1 1 0 11-2 0V8.414L6.707 6.707z" clip-rule="evenodd" /></svg>
+                    Cargar Base de Conocimiento (.txt)
+                </label>
+                <input id="file-upload" type="file" class="hidden" accept=".txt">
+                <p id="file-name" class="text-xs text-center text-white mt-1"></p>
+            </div>
+        </header>
+
+        <div id="chat-container" class="flex-1 p-6 overflow-y-auto"></div>
+
+        <div id="loading" class="hidden p-4 text-center">
+            <div class="flex justify-center items-center">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <span class="ml-3 text-slate-600">El asistente está pensando...</span>
+            </div>
+        </div>
+
+        <footer class="p-4 border-t border-slate-200 rounded-b-2xl">
+            <div class="flex items-center">
+                <input type="text" id="user-input" class="flex-1 border border-slate-300 rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" placeholder="Escribe tu pregunta aquí...">
+                <button id="send-btn" class="ml-3 bg-blue-600 text-white rounded-full p-3 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300 disabled:bg-blue-300 disabled:cursor-not-allowed">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const loadingIndicator = document.getElementById('loading');
+        const fileUpload = document.getElementById('file-upload');
+        const fileNameDisplay = document.getElementById('file-name');
+
+        let knowledgeBase = "";
+        const sampleKnowledgeBase = `P: ¿Cuál es el objetivo de la Maestría en Internet de las Cosas?\nR: El programa busca formar magísteres con la capacidad de desarrollar soluciones innovadoras basadas en IoT, integrando hardware, software y análisis de datos para resolver problemas en diversos sectores productivos.\n\nP: ¿Cuántos créditos tiene el programa?\nR: El plan de estudios consta de 48 créditos académicos.\n\nP: ¿Cuál es la modalidad de estudio?\nR: La maestría se ofrece en modalidad 100% virtual, permitiendo flexibilidad para los estudiantes.`;
+
+        function initializeChat() {
+            knowledgeBase = sampleKnowledgeBase;
+            fileNameDisplay.textContent = 'Usando datos de ejemplo.';
+            addBotMessage("¡Hola! Soy el asistente virtual de la Maestría en IoT. ¿Cómo puedo ayudarte hoy?");
+        }
+
+        fileUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file && file.type === "text/plain") {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    knowledgeBase = e.target.result;
+                    fileNameDisplay.textContent = file.name;
+                    addBotMessage(`Base de conocimiento actualizada con el archivo: ${file.name}. ¡Estoy listo para responder!`);
+                };
+                reader.readAsText(file);
+            } else {
+                addBotMessage("Por favor, sube un archivo de texto plano con la extensión .txt");
+            }
+        });
+
+        function addMessage(message, sender) {
+            const messageWrapper = document.createElement('div');
+            messageWrapper.classList.add('flex', 'mb-4', sender === 'user' ? 'justify-end' : 'justify-start');
+            const bubble = document.createElement('div');
+            bubble.classList.add('chat-bubble', sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-bot');
+            bubble.textContent = message;
+            messageWrapper.appendChild(bubble);
+            chatContainer.appendChild(messageWrapper);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function addBotMessage(message) { addMessage(message, 'bot'); }
+        function addUserMessage(message) { addMessage(message, 'user'); }
+
+        async function handleQuery() {
+            const userQuery = userInput.value.trim();
+            if (!userQuery) return;
+
+            addUserMessage(userQuery);
+            userInput.value = '';
+            showLoading(true);
+
+            if (!knowledgeBase) {
+                addBotMessage("Por favor, carga primero un archivo .txt con la base de conocimiento.");
+                showLoading(false);
+                return;
+            }
+
+            try {
+                // *** CAMBIO IMPORTANTE ***
+                // Ahora llamamos a nuestro propio servidor intermediario en lugar de a Google directamente.
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        query: userQuery,
+                        knowledge: knowledgeBase
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `API Error: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                addBotMessage(result.response);
+
+            } catch (error) {
+                console.error("Error al contactar el servidor intermediario:", error);
+                addBotMessage(`Hubo un error: ${error.message}. Revisa la consola para más detalles.`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function showLoading(isLoading) {
+            loadingIndicator.classList.toggle('hidden', !isLoading);
+            sendBtn.disabled = isLoading;
+            userInput.disabled = isLoading;
+            if (!isLoading) userInput.focus();
+        }
+
+        sendBtn.addEventListener('click', handleQuery);
+        userInput.addEventListener('keypress', (event) => { if (event.key === 'Enter') handleQuery(); });
+        window.onload = initializeChat;
+    </script>
+</body>
+</html>
+
