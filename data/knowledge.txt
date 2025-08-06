@@ -1,0 +1,95 @@
+P: ¿Cuál es el nombre oficial del programa y qué título se otorga al finalizar?
+R: El nombre del programa es 
+
+Maestría en Internet de las Cosas. Al aprobar los 39 créditos académicos y cumplir todos los requisitos, se otorga el título de 
+
+Magíster en Internet de las Cosas.
+
+P: ¿Cuál es la modalidad y la duración de la maestría?
+R: La maestría se ofrece en modalidad 
+
+100% virtual y tiene una duración estimada de 
+
+tres (3) semestres académicos.
+
+P: ¿Cuántos créditos académicos componen el plan de estudios?
+R: El plan de estudios está compuesto por un total de 
+
+39 créditos académicos , distribuidos en 
+
+31 créditos obligatorios y 8 créditos electivos.
+
+P: ¿Cuál es el costo estimado de la matrícula?
+R: El valor estimado de la matrícula para la primera cohorte es de 
+
+$7.304.760 pesos colombianos.
+
+P: ¿Cuál es el objetivo o la misión principal del programa?
+R: La misión del programa es contribuir con una oferta académica de calidad en tecnologías emergentes y disruptivas desde el Internet de las Cosas (IoT). Busca fomentar el desarrollo de proyectos de innovación e investigación aplicada a través de la planeación, diseño e implementación de modelos de arquitecturas funcionales para solucionar problemas específicos y fortalecer el desarrollo social, científico y económico del país.
+
+
+P: ¿Qué perfil profesional se requiere para ingresar a la maestría?
+R: El programa está dirigido a profesionales en áreas de Ingeniería de Sistemas, Electrónica, Telecomunicaciones, Informática, Software, Control, Automática, Mecatrónica, Ciencias de Datos, Telemática o denominaciones similares. También se admiten profesionales de otras áreas de ingeniería o ciencias de la computación afines.
+
+P: ¿Qué competencias y habilidades tendré como egresado del programa?
+R: Como Magíster en Internet de las Cosas de la UNAD, serás un profesional con alta sensibilidad social, capaz de:
+
+
+Desarrollar una infraestructura IoT innovadora para la solución de problemas sociales, empresariales o industriales, considerando los aspectos técnicos y normativos del país.
+
+
+Combinar metodologías y estrategias de seguridad o análisis inteligente dentro de un ecosistema IoT para mejorar el desempeño, la toma de decisiones y alcanzar las expectativas de competencia y producción de una organización.
+
+P: ¿En qué áreas o cargos podré desempeñarme laboralmente?
+R: El egresado podrá desempeñarse en una amplia variedad de cargos, tales como:
+
+Analista o Arquitecto de IoT.
+
+Desarrollador de domótica o de aplicaciones y dispositivos IoT.
+
+Asesor y consultor en ciberseguridad para soluciones IoT.
+
+Consultor empresarial para la adopción de la cuarta revolución industrial.
+
+Gestor de proyectos informáticos en la nube, especializados en IoT.
+
+Investigador en proyectos que incorporen el paradigma de IoT.
+
+P: ¿Cuáles son las líneas de profundización o los ejes temáticos del plan de estudios?
+R: El plan de estudios se estructura en torno a dos Núcleos Problémicos (NP) que definen las principales áreas de profundización:
+
+
+NP1: Infraestructura IoT: Enfocado en el diseño, disposición e implementación de una infraestructura IoT para el desarrollo de procesos de innovación y emprendimiento. Incluye cursos como "Arquitectura y diseño de Redes para IoT", "Plataformas cloud para IoT" y "Sistemas embebidos para IoT".
+
+
+
+NP2: Seguridad y Analítica: Orientado al diseño e implementación de metodologías de seguridad y análisis inteligente dentro de un ecosistema IoT. Abarca cursos como "Intrusión y testing", "Criptografía moderna" y "Data Analytics".
+
+
+P: ¿Cuáles son los requisitos para obtener el grado?
+R: Para obtener el título de Magíster, el estudiante debe cumplir con los siguientes requisitos:
+
+Haber aprobado los 39 créditos académicos del plan de estudios (31 obligatorios y 8 electivos).
+
+Acreditar un nivel de competencia en inglés B2, según el Marco Común Europeo.
+
+Haber sustentado y aprobado una de las opciones de grado disponibles: 
+
+Proyecto Aplicado (con modalidades en emprendimiento empresarial o desarrollo tecnológico) o Proyecto de Investigación.
+
+Estar a paz y salvo por todo concepto con la Universidad y pagar los derechos de grado.
+
+P: ¿Qué hace diferente a esta maestría de otras similares?
+R: La Maestría en Internet de las Cosas de la UNAD se distingue por varios factores clave:
+
+
+Modalidad 100% Virtual: Ofrece cobertura nacional y flexibilidad, permitiendo el acceso a profesionales en cualquier región del país.
+
+
+Flexibilidad Curricular: El 20.5% de los créditos son electivos, permitiendo al estudiante profundizar en áreas de su interés específico.
+
+
+Currículo Articulado con Problemas: El plan de estudios se basa en resolver problemas reales del contexto social e industrial, a través de Núcleos Problémicos.
+
+
+Articulación con el Sector Social: A través de iniciativas como el Observatorio Intersistémico Regional (OÍR) y Campo UNAD, se busca un impacto real en las comunidades.
