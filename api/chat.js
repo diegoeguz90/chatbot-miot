@@ -1,25 +1,26 @@
-// =================================================================
-// ARCHIVO 2: api/chat.js (El servidor intermediario seguro)
-// =================================================================
-// Este código se ejecuta en Vercel, no en el navegador del usuario.
-// Tiene acceso seguro a la clave de API.
-// =================================================================
+import { promises as fs } from 'fs';
+import path from 'path';
 
 export default async function handler(req, res) {
-    // Solo permitir peticiones POST
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
     try {
-        const { query, knowledge } = req.body;
+        // *** CAMBIO IMPORTANTE ***
+        // 1. Leer el archivo de conocimiento desde el servidor.
+        // Vercel despliega los archivos en un entorno de solo lectura,
+        // por lo que necesitamos construir la ruta de forma correcta.
+        const knowledgeFilePath = path.join(process.cwd(), 'data', 'knowledge.txt');
+        const knowledge = await fs.readFile(knowledgeFilePath, 'utf8');
 
-        if (!query || !knowledge) {
-            return res.status(400).json({ error: 'Faltan los parámetros "query" o "knowledge".' });
+        // 2. Obtener solo la pregunta del cuerpo de la petición.
+        const { query } = req.body;
+
+        if (!query) {
+            return res.status(400).json({ error: 'Falta el parámetro "query".' });
         }
 
-        // *** ACCESO SEGURO A LA CLAVE DE API ***
-        // Vercel inyectará la clave aquí desde las "Environment Variables".
         const apiKey = process.env.GEMINI_API_KEY;
         if (!apiKey) {
             return res.status(500).json({ error: 'La clave de API de Gemini no está configurada en el servidor.' });
@@ -60,15 +61,16 @@ export default async function handler(req, res) {
         }
 
         const result = await geminiResponse.json();
-        
         const botResponse = result.candidates?.[0]?.content?.parts?.[0]?.text || "No se pudo obtener una respuesta.";
 
-        // Enviar la respuesta de vuelta al chatbot en el navegador
         res.status(200).json({ response: botResponse });
 
     } catch (error) {
         console.error('Error en la función del servidor:', error);
+        // Devuelve un error más específico si el archivo no se encuentra
+        if (error.code === 'ENOENT') {
+             return res.status(500).json({ error: 'No se encontró el archivo de conocimiento (knowledge.txt) en el servidor.' });
+        }
         res.status(500).json({ error: error.message || 'Error interno del servidor.' });
     }
 }
-
