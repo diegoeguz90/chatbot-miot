@@ -1,10 +1,3 @@
-// =================================================================
-// ARCHIVO 1: index.html (El frontend que ve el usuario)
-// =================================================================
-// NOTA: Fíjate que la llamada a la API ahora apunta a '/api/chat', 
-// no a la URL de Google.
-// =================================================================
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -29,18 +22,10 @@
 <body class="bg-slate-100 flex flex-col items-center justify-center min-h-screen p-4">
 
     <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl flex flex-col h-[90vh]">
-        <header class="bg-blue-600 text-white p-4 rounded-t-2xl shadow-md flex flex-col md:flex-row justify-between items-center">
+        <header class="bg-blue-600 text-white p-4 rounded-t-2xl shadow-md flex justify-center items-center">
             <div>
-                <h1 class="text-xl font-bold">Asistente Virtual</h1>
-                <p class="text-sm opacity-90">Maestría en Internet de las Cosas (IoT)</p>
-            </div>
-            <div class="mt-3 md:mt-0">
-                <label for="file-upload" class="cursor-pointer bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-50 transition-colors duration-300 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 8.414V13a1 1 0 11-2 0V8.414L6.707 6.707z" clip-rule="evenodd" /></svg>
-                    Cargar Base de Conocimiento (.txt)
-                </label>
-                <input id="file-upload" type="file" class="hidden" accept=".txt">
-                <p id="file-name" class="text-xs text-center text-white mt-1"></p>
+                <h1 class="text-xl font-bold text-center">Asistente Virtual</h1>
+                <p class="text-sm opacity-90 text-center">Maestría en Internet de las Cosas (IoT)</p>
             </div>
         </header>
 
@@ -68,32 +53,10 @@
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
         const loadingIndicator = document.getElementById('loading');
-        const fileUpload = document.getElementById('file-upload');
-        const fileNameDisplay = document.getElementById('file-name');
-
-        let knowledgeBase = "";
-        const sampleKnowledgeBase = `P: ¿Cuál es el objetivo de la Maestría en Internet de las Cosas?\nR: El programa busca formar magísteres con la capacidad de desarrollar soluciones innovadoras basadas en IoT, integrando hardware, software y análisis de datos para resolver problemas en diversos sectores productivos.\n\nP: ¿Cuántos créditos tiene el programa?\nR: El plan de estudios consta de 48 créditos académicos.\n\nP: ¿Cuál es la modalidad de estudio?\nR: La maestría se ofrece en modalidad 100% virtual, permitiendo flexibilidad para los estudiantes.`;
 
         function initializeChat() {
-            knowledgeBase = sampleKnowledgeBase;
-            fileNameDisplay.textContent = 'Usando datos de ejemplo.';
-            addBotMessage("¡Hola! Soy el asistente virtual de la Maestría en IoT. ¿Cómo puedo ayudarte hoy?");
+            addBotMessage("¡Hola! Soy el asistente virtual de la Maestría en IoT. Estoy listo para responder tus preguntas sobre el programa.");
         }
-
-        fileUpload.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file && file.type === "text/plain") {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    knowledgeBase = e.target.result;
-                    fileNameDisplay.textContent = file.name;
-                    addBotMessage(`Base de conocimiento actualizada con el archivo: ${file.name}. ¡Estoy listo para responder!`);
-                };
-                reader.readAsText(file);
-            } else {
-                addBotMessage("Por favor, sube un archivo de texto plano con la extensión .txt");
-            }
-        });
 
         function addMessage(message, sender) {
             const messageWrapper = document.createElement('div');
@@ -117,21 +80,15 @@
             userInput.value = '';
             showLoading(true);
 
-            if (!knowledgeBase) {
-                addBotMessage("Por favor, carga primero un archivo .txt con la base de conocimiento.");
-                showLoading(false);
-                return;
-            }
-
             try {
                 // *** CAMBIO IMPORTANTE ***
-                // Ahora llamamos a nuestro propio servidor intermediario en lugar de a Google directamente.
+                // El cuerpo de la petición ahora solo envía la pregunta del usuario.
+                // El servidor se encargará de leer el archivo de conocimiento.
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        query: userQuery,
-                        knowledge: knowledgeBase
+                        query: userQuery
                     })
                 });
 
